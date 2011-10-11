@@ -9,6 +9,8 @@ def generate_R_input(report_path, output_path):
 	    first_line = False
 	    continue
         line = line.strip().split(',')
+	if line[1] == "true":
+	    continue
 	if line[5]   == 'Yes':
 	    confidence_values.append(line[6])
 	elif line[5] == 'No':

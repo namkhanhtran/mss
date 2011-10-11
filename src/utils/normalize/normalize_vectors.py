@@ -8,7 +8,6 @@ word [space] freq1 freq2 freq3 ...
 Parameter list is described as following:
     @param1: (N) number of files to normalize
     @param2, 3, ... (N+1) : files
-    @param (N+2): output
 
 @author: elia bruni (2011)
 '''
@@ -21,11 +20,9 @@ if __name__ == "__main__":
     N = eval(sys.argv[1])
     # open each file, create and normalize the vectors
     for i in range(2, N+2):
-        print i
         F = open(sys.argv[i], 'r')
 	d = 0
 	matrix = {}
-	idx = 0
         for line in F:
 	    if (d == 0):
 	        d = line.count(' ')

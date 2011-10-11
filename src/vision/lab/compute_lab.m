@@ -1,7 +1,5 @@
 function compute_lab
 
-% test
-
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/lab' ;
 conf.numClasses = 1 ;

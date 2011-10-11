@@ -38,14 +38,14 @@ def map_pos(pos_list, in_file_path, ou_file_path):
     	line = line.split(' ')
         tag   = line[0]
 	image = line[1]
-	check_color(tag)
+	#check_color(tag)
 	if tag in pos_freq and pos_freq[tag] > 100:
 	    pos_tag = pos_dic[tag]
 	    check   = pos_tag.lower()
 	    if check[:-2] == 'gray':
 	        check = 'grey-j'
 	    if check[:-2] in colors:
-	        #check_color(check[:-2])
+	        check_color(check[:-2])
 	        pos_tag = check[:-2] + '-j'
 	    ou_file.write(pos_tag + ' ' + image + '\n')
     in_file.close()
