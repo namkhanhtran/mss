@@ -1,4 +1,4 @@
-function  compute_hog
+function compute_hog
 
 
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
