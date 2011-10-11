@@ -1,4 +1,4 @@
-function singleDescrs =  compute_hog_test
+function singleDescrs =  compute_hog
 
 
 conf.calDir = '/Users/eliabruni/data/esp/test/input/esp_sample' ;
