@@ -12,7 +12,7 @@ Usage:
 
 color_counts = {}
 colors       = ['black','blue','brown','grey','green','orange','pink','purple','red','white','yellow']
-def read_csv(report_path, block_path, out_path):
+def read_csv(in_path, ou_path):
     #debug
     tot_count   = 0
     print_count = 0
@@ -20,15 +20,18 @@ def read_csv(report_path, block_path, out_path):
     index       = {}
     
     # 1st file
-    report_file = open(report_path, 'r')
+    report_file = open(in_path, 'r')
     first_line = True
     for line in report_file:
         if first_line:
 	    first_line = False
 	    continue
         line  = line.strip().split(',')
+	bool  = line[5]
 	conf  = float(line[6])
-	if conf == 1:
+	if bool == 'Yes':
+	    print bool
+	if bool == 'Yes' and conf == 1:
 	    image = line[8]
 	    image = image[+68:]
 	    tag   = line[9].rstrip()
@@ -44,12 +47,12 @@ def read_csv(report_path, block_path, out_path):
 	        index[tag] = list 
     report_file.close()
 
-    out_file = open(out_path, 'w')
+    ou_file = open(ou_path, 'w')
     for tag in index:
 	for image in index[tag]:
-            print_count += 1
-	    out_file.write(tag + ' ' + image + '\n')
-    out_file.close()
+            #print_count += 1
+	    ou_file.write(tag + ' ' + image + '\n')
+    ou_file.close()
 
     for color in color_counts:
         print color + ': ' + str(color_counts[color])
