@@ -1,0 +1,77 @@
+import sys, os
+
+
+"""
+Given the crowdflower final report, this program returns a
+inverted index <tag,image> as ouput.
+    
+Usage:
+@param1: the final CF report (csv format)
+@param2: the output directory
+"""
+
+color_counts = {}
+colors       = ['black','blue','brown','grey','green','orange','pink','purple','red','white','yellow']
+def read_csv(report_path, block_path, out_path):
+    #debug
+    tot_count   = 0
+    print_count = 0
+
+    index       = {}
+    
+    # 1st file
+    report_file = open(report_path, 'r')
+    first_line = True
+    for line in report_file:
+        if first_line:
+	    first_line = False
+	    continue
+        line  = line.strip().split(',')
+	conf  = float(line[6])
+	if conf == 1:
+	    image = line[8]
+	    image = image[+68:]
+	    tag   = line[9].rstrip()
+	    check_color(tag)
+	    tot_count += 1
+            if tag in index:
+	        list = index[tag]
+	        list.append(image)
+	        index[tag] = list
+	    else:
+	        list = []
+	        list.append(image)
+	        index[tag] = list 
+    report_file.close()
+
+    out_file = open(out_path, 'w')
+    for tag in index:
+	for image in index[tag]:
+            print_count += 1
+	    out_file.write(tag + ' ' + image + '\n')
+    out_file.close()
+
+    for color in color_counts:
+        print color + ': ' + str(color_counts[color])
+ 
+def check_color(tag):
+    global color_counts
+    global colors
+    ctag = tag
+    if ctag == 'gray':
+	ctag = 'grey'
+    if ctag in colors:
+	if ctag in color_counts:
+	    print ctag
+	    count = color_counts[ctag]
+	    count += 1
+	    color_counts[ctag] = count
+	else:
+	    count = 1
+	    color_counts[ctag] = count
+
+if __name__ =="__main__":
+    _in_path = sys.argv[1]
+    _ou_path    = sys.argv[2]	
+
+    read_csv(_in_path, _ou_path)
