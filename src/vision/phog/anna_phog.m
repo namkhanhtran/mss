@@ -1,4 +1,4 @@
-function p = anna_phog(I,bin,angle,L,roi)
+function p = anna_phog(Img,bin,angle,L,roi)
 % anna_PHOG Computes Pyramid Histogram of Oriented Gradient over a ROI.
 %               
 % [BH, BV] = anna_PHOG(I,BIN,ANGLE,L,ROI) computes phog descriptor over a ROI.
@@ -17,7 +17,7 @@ function p = anna_phog(I,bin,angle,L,roi)
 %	p - pyramid histogram of oriented gradients
 
 
-Img = imread(I);
+%Img = imread(I);
 if size(Img,3) == 3
     G = rgb2gray(Img);
 else
@@ -48,5 +48,3 @@ end
 bh_roi = bh(roi(1,1):roi(2,1),roi(3,1):roi(4,1));
 bv_roi = bv(roi(1,1):roi(2,1),roi(3,1):roi(4,1));
 p = anna_phogDescriptor(bh_roi,bv_roi,L,bin);
-s = sprintf('%s.txt',I);
-dlmwrite(s,p);
