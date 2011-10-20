@@ -1,14 +1,11 @@
 
 function compute_low_level
 
-
-% TODO: still problems with bw while extrcacting layout
-
-conf.calDir        = '/Users/eliabruni/data/mart/images' ;
-conf.layoutDir     = '/Users/eliabruni/data/esp/test/ouput/layout' ;
-conf.brightnessDir = '/Users/eliabruni/data/esp/test/ouput/brightness' ;
-conf.spectralDir   = '/Users/eliabruni/data/esp/test/ouput/spectral' ;
-conf.dittoDir      = '/Users/eliabruni/data/esp/test/ouput/ditto' ;
+conf.calDir        = '' ;
+conf.layoutDir     = '' ;
+conf.brightnessDir = '' ;
+conf.spectralDir   = '' ;
+conf.dittoDir      = '' ;
 
 conf.numClasses = 1 ;
 
@@ -53,7 +50,7 @@ maxWidth = max(widths);
 maxHeight = max(heights);
 
 
-blockSize = 10 ;
+blockSize = 100 ;
 listLength = length(images)/blockSize ;
 histsNames = [] ;
 for jj = 1:listLength
@@ -72,36 +69,25 @@ for ii = 1:length(images)
     end
     im = imread(fullfile(conf.calDir, images{ii}));
     im = imresize(im, [imageSize imageSize], 'bilinear') ;
-    %lay = computeLayout(im) ;
-    %size(lay)
-    %layouts{ii - (iter * blockSize)}      = computeLayout(im) ;
+    % 1
+    layouts{ii - (iter * blockSize)}      = computeLayout(im) ;
+    % 2
     brightnesses{ii - (iter * blockSize)} = computeBrightness(im) ;
-    %br = computeBrightness(im) ;
-    %size(br)
+    % 3
     spectrals{ii - (iter * blockSize)}    = computeSpectral(im, maxWidth) ;
-    %sp = computeSpectral(im, maxWidth) ;
-    %size(sp)
+    % 4
     dittos{ii - (iter * blockSize)}       = computeDitto(im, maxHeight) ;
-    %di = computeDitto(im, maxHeight) ;
-    %size(di)
     
     if mod(ii, blockSize) == 0
-        %tmpLayouts      = cat(1, layouts{:}) ;
-        %tmpHists = rot90(tmpHists) ;
-        %layoutsName      = histsNames{ii/blockSize} ;
-        %eval([layoutsName      ' = tmpLayouts;' ]) ;
-        %conf.prefix = histsNames{ii/blockSize} ;
-        %conf.histPath = fullfile(conf.layoutDir, [conf.prefix '.mat']) ;
-        %save(conf.histPath, strcat(histsNames{ii/blockSize})) ;
-        %eval([layoutsName   ' = {};' ]) ;
         
-        
-        
-        %hists = {} ;
-        %tmpHists = {} ;
-        %histName = {} ;
-
-        
+        % 1
+        tmpLayouts      = cat(1, layouts{:}) ;
+        layoutsName      = histsNames{ii/blockSize} ;
+        eval([layoutsName      ' = tmpLayouts;' ]) ;
+        conf.prefix = histsNames{ii/blockSize} ;
+        conf.histPath = fullfile(conf.layoutDir, [conf.prefix '.mat']) ;
+        save(conf.histPath, strcat(histsNames{ii/blockSize})) ;
+        eval([layoutsName   ' = {};' ]) ;
         
         % 2
         tmpBrightnesses = cat(1, brightnesses{:}) ;
@@ -110,7 +96,7 @@ for ii = 1:length(images)
         conf.prefix = histsNames{ii/blockSize} ;
         conf.histPath = fullfile(conf.brightnessDir, [conf.prefix '.mat']) ;
         save(conf.histPath, strcat(histsNames{ii/blockSize})) ;
-        %eval([layoutsName   ' = {};' ]) ;
+        eval([brightnessesName   ' = {};' ]) ;
         
         % 3
         tmpSpectrals    = cat(1, spectrals{:}) ;
@@ -130,11 +116,54 @@ for ii = 1:length(images)
         save(conf.histPath, strcat(histsNames{ii/blockSize})) ;
         eval([dittosName    ' = {};' ]) ;
         
-        iter = iter + 1 ;
         
+        % cleaning all
+        layouts = {} ;
+        brightnesses = {} ;
+        spectrals = {} ;
+        dittos = {} ;
+        tmpLayouts = {} ;
+        layoutsName = {} ;
+        tmpBrightnesses = {} ;
+        brightnessesName = {} ;
+        tmpSpectrals = {} ;
+        spectralsName = {} ;
+        tmpDittos = {} ;
+        dittosName = {} ;
+        
+        iter = iter + 1 ;
     end
-    
 end
+
+
+
+% 1
+tmpLayouts = cat(1, layouts{:}) ;
+eval(['ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' '= tmpLayouts;' ]) ;
+conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' ;
+conf.histPath = fullfile(conf.layoutDir, [conf.prefix '.mat']) ;
+save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ') ;
+
+% 2
+tmpBrightnesses = cat(1, brightnesses{:}) ;
+eval(['ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' '= tmpBrightnesses;' ]) ;
+conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' ;
+conf.histPath = fullfile(conf.brightnessDir, [conf.prefix '.mat']) ;
+save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ') ;
+
+% 3
+tmpSpectrals = cat(1, spectrals{:}) ;
+eval(['ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' '= tmpSpectrals;' ]) ;
+conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' ;
+conf.histPath = fullfile(conf.spectralDir, [conf.prefix '.mat']) ;
+save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ') ;
+
+% 4
+tmpDittos = cat(1, dittos{:}) ;
+eval(['ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' '= tmpDittos;' ]) ;
+conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' ;
+conf.histPath = fullfile(conf.dittoDir, [conf.prefix '.mat']) ;
+save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ') ;
 
 
 % -------------------------------------------------------------------------
@@ -143,13 +172,12 @@ function layoutFeatures = computeLayout(im)
 % extract thumbnail (square, low resolution version of image) and take greyscale + 3 layers as features
 
 thumbNailSize = 4;
-
-thumbnail = uint8(round(imresize(single(im),[thumbNailSize thumbNailSize])));
 if ndims(im) == 2
-    layoutFeatures = [reshape(uint8(thumbnail),1,[]) reshape(thumbnail,1,[])];
-else
-layoutFeatures = [reshape(uint8(round(mean(thumbnail,3))),1,[]) reshape(thumbnail,1,[])];
+    im = cat(3,im,im,im);
 end
+thumbnail = uint8(round(imresize(single(im),[thumbNailSize thumbNailSize])));
+layoutFeatures = [reshape(uint8(round(mean(thumbnail,3))),1,[]) reshape(thumbnail,1,[])];
+
 
 
 % -------------------------------------------------------------------------
@@ -158,15 +186,17 @@ function brightnessFeatures = computeBrightness(im)
 % extract and normalise brightness features for a particular colour layer, given a choice of the number
 % of bins (this is done four times, and features are concatenated into brightnessFeatures)
 
+if ndims(im) == 2
+    im = cat(3,im,im,im);
+end
 smoothSpectrumWidth = 20;
 binWidth = power(2,4); % by eye, four or five seems best...
 brightnessBinCentres = [0:binWidth:255]+binWidth/2;
 rgb = 'krgb'; % color codes
 numPixels = numel(im)/3;
-
 brightnessFeatures = [];
 for l=[0:3]
-    if l == 0 || ndims(im) == 2
+    if l == 0
         L = mean(im,3);
     else
         %subplot(4,4,l*4+1)
@@ -189,10 +219,14 @@ end
 function hSpectralFeatures = computeSpectral(im, maxWidth)
 % -------------------------------------------------------------------------
 % extract and normalise horizontal spectral features
+
+if ndims(im) == 2
+    im = cat(3,im,im,im);
+end
 smoothSpectrumWidth = 20;
 hSpectralFeatures = [];
 for l=[0:3]
-    if l == 0 || ndims(im) == 2
+    if l == 0
         L = mean(im,3);
     else
         %subplot(4,4,l*4+1)
@@ -218,10 +252,14 @@ end
 function vSpectralFeatures = computeDitto(im, maxHeight)
 % -------------------------------------------------------------------------
 % ditto for vertical features
+
+if ndims(im) == 2
+    im = cat(3,im,im,im);
+end
 smoothSpectrumWidth = 20;
 vSpectralFeatures = [];
 for l=[0:3]
-    if l == 0 || ndims(im) == 2
+    if l == 0
         L = mean(im,3);
     else
         %subplot(4,4,l*4+1)
