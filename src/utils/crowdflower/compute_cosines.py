@@ -2,6 +2,23 @@ import sys, os, glob
 from numpy import *
 from numpy.linalg import norm
 
+"""
+This program computes and write into the given output
+directory cosine similarities for all the word pairs
+of the given input file, with the feature matrices
+inside the given directory. This version is for literal/
+non-literal analysis, therefore also a 'L' for literal
+and a 'N' for non-literal inside the input file
+is expected (adj noun L/N).
+
+Usage:
+@param1: feature matrices directory
+@param2: file with the word pairs and L/N
+@param3: output file path
+
+"""
+
+
 def compute_cosines(matrices_dir, in_path, ou_path):
     in_file = open(in_path, 'r')
     word_list = []

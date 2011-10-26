@@ -1,5 +1,18 @@
 import sys
 
+"""
+This program retain those words occurring threshold time in
+the first file (in_path) and ouputs a filtered version of the
+second file (me_path) using them.
+
+Usage:
+@param1: first file, where we count word occurrences
+@param2: second file with the word pairs we want to filter
+@param3: output path
+
+"""
+
+
 def filter(in_path, me_path, ou_path):
     in_file = open(in_path, 'r')
     counts = {}

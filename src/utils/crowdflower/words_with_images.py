@@ -3,8 +3,9 @@ import glob, os, shutil, sys
 
 def filter_dataset(dataset_path):
     '''
+    This program assign uuid names for images and labels of the given directory.
+    Images will have '.jpg' extension, labels '.txt' extension.
     Dataset_path must contain one folder called 'original_data', with two subfolders 'images' and 'labels'.
-    Images are in '.jpg' format, labels in '.jpg.desc' format (maybe labels' format has to be changed).
     '''
     
 

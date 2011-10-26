@@ -1,5 +1,14 @@
 import sys
 
+"""
+This program creates a directory containing all the constructed
+from the given inverted index with lines of the form <tag image>.
+
+Usage:
+@param1: path to the inverted index file
+@param2: output directory for the labels
+
+"""
 
 def create_labels_from_inverted_index(inverted_index_path, out_path):
     index_file = open(inverted_index_path, 'r')

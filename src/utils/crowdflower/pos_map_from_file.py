@@ -3,7 +3,9 @@ import glob, os, sys
 
 """
 Given a list <word lemma pos freq>, this code assign the most frequent 
-pos-tag in the given list to each word of each label in the dataset directory
+pos-tag in the given list to each word of each label in the dataset directory.
+Moreover, it ensures that color adj have '-j' tag no matter what and 
+map 'gray' instances to 'grey' (to have only one grey word).
     
     Usage:
     @param1: pos list
