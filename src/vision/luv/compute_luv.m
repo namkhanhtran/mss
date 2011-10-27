@@ -5,13 +5,11 @@ conf.calDir = '/Users/eliabruni/data/esp/test/input/esp-sample-1' ;
 conf.dataDir = '/Users/eliabruni/data/esp/test/ouput/luv' ;
 conf.autoDownloadData = false ;
 conf.numTrain = 30 ;
-conf.numTest = 4 ;
 conf.numClasses = 1 ;
 conf.numWords = 10 ;
 conf.numSpatialX = 1 ;
 conf.numSpatialY = 1 ;
 conf.quantizer = 'kdtree' ;
-%conf.phowOpts = {'Verbose', 2, 'Step', 5} ;
 
 conf.prefix = 'baseline' ;
 conf.randSeed = 1 ;
@@ -56,8 +54,6 @@ model.vocab = [] ;
 
 if ~exist(conf.vocabPath)
     
-    % TODO:
-    % Preallocate singleDescrs for efficiency!
     singleDescrs = {} ;
     
     imageSize = 256;
@@ -65,8 +61,6 @@ if ~exist(conf.vocabPath)
         
         im = imread(fullfile(conf.calDir, images{ii}));
         im = standarizeImage(im) ;
-        %im = im2double(im) ;
-        %im = imresize(im, [imageSize imageSize], 'bilinear') ;
         if ndims(im) == 2
             im = cat(3,im,im,im);
         end
@@ -76,16 +70,12 @@ if ~exist(conf.vocabPath)
         singleDescrs{ii} = vl_colsubset(single(descrs), length(descrs)) ;
         
     end
-    %singleDescrs
-    
+
     % Quantize the descriptors to get the visual words
-    
     singleDescrs = vl_colsubset(cat(2, singleDescrs{:}), 10e4) ;
     singleDescrs = single(singleDescrs) ;
-    
-    
     vocab = vl_kmeans(singleDescrs, conf.numWords, 'verbose','algorithm', 'lloyd') ;
-    
+
     save(conf.vocabPath, 'vocab') ;
 else
     load(conf.vocabPath) ;
@@ -109,7 +99,6 @@ for jj = 1:listLength
 end
 histsNames = sort(histsNames) ;
 
-
 hists = {} ;
 iter = 0 ;
 for ii = 1:length(images)
@@ -119,7 +108,6 @@ for ii = 1:length(images)
     
     im = imread(fullfile(conf.calDir, images{ii})) ;
     hists{ii - (iter * blockSize)} = getImageDescriptor(model, im);
-    
     
     if mod(ii, blockSize) == 0
         tmpHists = cat(2, hists{:}) ;
@@ -134,15 +122,13 @@ for ii = 1:length(images)
         tmpHists = {} ;
         histName = {} ;
         iter = iter + 1 ;
-        
     end
-    
 end
+
 tmpHists = cat(2, hists{:}) ;
 tmpHists = rot90(tmpHists) ;
 
 eval(['ZZZZZZZZZZZZZZZZZZZZ' '= tmpHists;' ]) ;
-% hists = cat(2, hists{:}) ;
 conf.prefix = 'ZZZZZZZZZZZZZZZZZZZZ' ;
 conf.histPath = fullfile(conf.dataDir, [conf.prefix '.mat']) ;
 save(conf.histPath,'ZZZZZZZZZZZZZZZZZZZZ') ;
@@ -160,26 +146,18 @@ im = imresize(im, [480 NaN]) ;
 function hist = getImageDescriptor(model, im)
 % -------------------------------------------------------------------------
 
-%imageSize = 480;
 im = standarizeImage(im) ;
-%im = im2double(im) ;
-%im = imresize(im, [480 10], 'bilinear') ;
+
 if ndims(im) == 2
     im = cat(3,im,im,im);
 end
-%width = size(im,2) ;
-%height = size(im,1) ;
+
 numWords = size(model.vocab, 2) ;
 size(numWords)
 
-
-% get PHOW features
+% get luv features
 descrs = rgb2luv(im);
 descrs = vl_colsubset(single(descrs), length(descrs)) ;
-
-%descrs = cat(1, 100 , 100);
-size(descrs)
-%[frames, descrs] = vl_phow(im, model.phowOpts{:}) ;
 
 % quantize appearance
 switch model.quantizer
@@ -190,14 +168,6 @@ switch model.quantizer
             single(descrs),...
             'MaxComparisons', 15)) ;
 end
-
-% quantize location
-%width = size(im, 2) ;
-%height = size(im, 1) ;
-
-
-%binsx = vl_binsearch(linspace(1,width,model.numSpatialX+1), frames(1,:)) ;
-%binsy = vl_binsearch(linspace(1,height,model.numSpatialY+1), frames(2,:)) ;
 
 bins = sub2ind([model.numSpatialY, model.numSpatialX, numWords], ...
     binsa) ;
