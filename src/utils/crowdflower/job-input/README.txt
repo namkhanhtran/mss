@@ -4,7 +4,7 @@ Steps to prepare a crowdflower job (to be translated into a wiki page):
 	==> add random.sh code to this directory
 
 2. Filter out empty labels
-	==> remove_empty_lables.sh
+	==> remove_empty_labels.sh
 
 3. From the original data set copy all the images correspondent to the survived labels into 'labels' dir
 
