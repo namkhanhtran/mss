@@ -20,7 +20,7 @@ def extract_images(dataset_path, all_images_path):
 	shutil.copy(os.path.join(all_images_path, image_name), image_path)
 
 if __name__ =="__main__":
-    _dataset_path    = sysargv[1]
-    _all_images_path = sysargv[2]
+    _dataset_path    = sys.argv[1]
+    _all_images_path = sys.argv[2]
 
     extract_images(_dataset_path, _all_images_path)
