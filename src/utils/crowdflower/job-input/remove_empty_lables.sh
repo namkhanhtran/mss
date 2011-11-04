@@ -1,9 +1,9 @@
-#$ -wd /mnt/8tera/test-marco/image-and-text/elia/mirflickr/dataset/data/meta/all_tags
+#$ -wd <labels-dir>
 #$-q *@compute-0-*
 #$ -j y
 #$ -S /bin/bash
 #$ -m bea
-#$ -M elia.bruni@gmail.com
+#$ -M <account>
 
 
 # This script removes empty files
