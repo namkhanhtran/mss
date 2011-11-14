@@ -1,4 +1,4 @@
-% getColorNodesScript
+function get_color_nodes
 
 conf.inputDir = <PATH-TO-THE-IMAGES> ;
 conf.outputDir = <CLUSTERS-PATH> ;
