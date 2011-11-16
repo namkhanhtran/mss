@@ -13,12 +13,15 @@
 
 ## Phase 3 - Filter out word pairs
   **Input**: Set of word pairs (F x F)
+
   **Output**: Filter out the pair that the frequencies of words are less than a threshold (5, 10??)
 
 ## Phase 4 - Get final word pairs
   **Input**: Thres\_word pairs and probably the distribution that we want to test
+
   **Output**: Using WordNet (e.g implemented in NLTK) to get the final set
 
 ## Phase 5 - Create gold standard
   **Input**: Final set of word pairs
+
   **Output**: Gold standard (e.g for WordSim)
